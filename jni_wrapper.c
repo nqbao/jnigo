@@ -10,17 +10,18 @@ JVM* createJVM() {
     }
     JavaVMInitArgs vm_args;
     memset(&vm_args, 0, sizeof(vm_args));
-    JavaVMOption options[1];
     vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 1;
-    vm_args.options = options;
 
     char* classpath = getenv("CLASSPATH");
-    int optlen = strlen(classpath) + 30;
-    char optstr[optlen];
-    strcpy(optstr, "-Djava.class.path=");
-    options[0].optionString = strcat(optstr, classpath);
-    vm_args.options = options;
+    if (classpath != NULL) {
+        JavaVMOption options[1];
+        int optlen = strlen(classpath) + 30;
+        char optstr[optlen];
+        strcpy(optstr, "-Djava.class.path=");
+        options[0].optionString = strcat(optstr, classpath);
+        vm_args.options = options;
+        vm_args.nOptions = 1;
+    }
 
     jint ret;
     ret = JNI_CreateJavaVM(&jvm->jvm, (void **)&jvm->env, &vm_args);

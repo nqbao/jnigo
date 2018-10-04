@@ -49,6 +49,7 @@ func (jvm *JVM) env() *C.JNIEnv {
 func (jvm *JVM) ExceptionCheck() error {
 	errExist := (uint8)(C.ExceptionCheck(jvm.env()))
 	if errExist != 0 {
+		C.ExceptionDescribe(jvm.env())
 		C.ExceptionClear(jvm.env())
 		// TODO: Exception details
 		return errors.New("Exception")

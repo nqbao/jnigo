@@ -49,6 +49,10 @@ func (jvm *JVM) newjStringFromJava(jstr C.jobject) (*jString, error) {
 	return ret, nil
 }
 
+func (jvm *JVM) NewString(str string) (*jString, error) {
+	return jvm.newjString(str)
+}
+
 func (jvm *JVM) newjString(str string) (*jString, error) {
 	cstr := C.CString(str) // will be freed by JNI??
 	jstr := C.NewStringUTF(jvm.env(), cstr)
